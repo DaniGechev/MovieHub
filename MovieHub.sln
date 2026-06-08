@@ -1,0 +1,39 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieHub.Data", "MovieHub.Data\MovieHub.Data.csproj", "{C684381C-CAA1-4E80-A6B1-7712380600A9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieHub.Services", "MovieHub.Services\MovieHub.Services.csproj", "{4B67691A-40A2-48C0-9F8E-EC8C52C778E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieHub.Web", "MovieHub.Web\MovieHub.Web.csproj", "{64A85C54-FE7B-462B-8D1F-43BF1D988E6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieHub.Tests", "MovieHub.Tests\MovieHub.Tests.csproj", "{9923C6CE-F111-4B34-A7DC-FA10647F1B1F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C684381C-CAA1-4E80-A6B1-7712380600A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C684381C-CAA1-4E80-A6B1-7712380600A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C684381C-CAA1-4E80-A6B1-7712380600A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C684381C-CAA1-4E80-A6B1-7712380600A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B67691A-40A2-48C0-9F8E-EC8C52C778E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B67691A-40A2-48C0-9F8E-EC8C52C778E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B67691A-40A2-48C0-9F8E-EC8C52C778E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B67691A-40A2-48C0-9F8E-EC8C52C778E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64A85C54-FE7B-462B-8D1F-43BF1D988E6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64A85C54-FE7B-462B-8D1F-43BF1D988E6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64A85C54-FE7B-462B-8D1F-43BF1D988E6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64A85C54-FE7B-462B-8D1F-43BF1D988E6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9923C6CE-F111-4B34-A7DC-FA10647F1B1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9923C6CE-F111-4B34-A7DC-FA10647F1B1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9923C6CE-F111-4B34-A7DC-FA10647F1B1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9923C6CE-F111-4B34-A7DC-FA10647F1B1F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
