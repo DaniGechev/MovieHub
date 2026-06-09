@@ -1,0 +1,23 @@
+@model MovieFormModel
+@{
+    ViewData["Title"] = "Add Movie";
+}
+
+<h1 class="mb-4">Add Movie</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @Html.EditorForModel()
+
+            <button type="submit" class="btn btn-primary">Add Movie</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

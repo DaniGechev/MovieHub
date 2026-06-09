@@ -1,0 +1,24 @@
+@model MovieFormModel
+@{
+    ViewData["Title"] = "Edit Movie";
+    var movieId = ViewContext.RouteData.Values["id"];
+}
+
+<h1 class="mb-4">Edit Movie</h1>
+
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit" asp-route-id="@movieId" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @Html.EditorForModel()
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

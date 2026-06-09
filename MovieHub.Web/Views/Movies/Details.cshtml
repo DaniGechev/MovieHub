@@ -1,0 +1,195 @@
+@model MovieDetailsViewModel
+@{
+    ViewData["Title"] = Model.Movie.Title;
+    var movie = Model.Movie;
+}
+
+@* Anti-forgery token read by the fetch calls below (CSRF protection). *@
+@Html.AntiForgeryToken()
+
+<div class="row">
+    <div class="col-md-4">
+        <img src="@movie.ImageUrl" class="img-fluid rounded shadow-sm" alt="@movie.Title" />
+    </div>
+    <div class="col-md-8">
+        <h1>@movie.Title <small class="text-muted">(@movie.ReleaseYear)</small></h1>
+        <p class="text-muted">@movie.GenreName &middot; Directed by @movie.Director</p>
+        <p><strong>Average rating:</strong> @movie.AverageRating.ToString("0.0") / 10</p>
+        <p>@movie.Description</p>
+
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <button id="favorite-btn"
+                    class="btn @(Model.IsFavorite ? "btn-warning" : "btn-outline-warning")"
+                    data-movie-id="@movie.Id"
+                    data-is-favorite="@Model.IsFavorite.ToString().ToLower()">
+                @(Model.IsFavorite ? "★ In your favorites" : "☆ Add to favorites")
+            </button>
+        }
+        else
+        {
+            <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-warning">
+                Log in to add to favorites
+            </a>
+        }
+
+        @if (User.IsAdmin())
+        {
+            <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-secondary">Edit</a>
+            <form asp-action="Delete" asp-route-id="@movie.Id" method="post" class="d-inline"
+                  onsubmit="return confirm('Delete this movie?');">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        }
+    </div>
+</div>
+
+<hr />
+
+<h3>Reviews</h3>
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <div class="card card-body mb-4">
+        <div class="mb-2">
+            <label for="review-content" class="form-label">Your review</label>
+            <textarea id="review-content" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="mb-2" style="max-width: 160px;">
+            <label for="review-rating" class="form-label">Rating (1-10)</label>
+            <input id="review-rating" type="number" min="1" max="10" value="8" class="form-control" />
+        </div>
+        <div>
+            <button id="submit-review" class="btn btn-primary" data-movie-id="@movie.Id">
+                Post review
+            </button>
+            <span id="review-error" class="text-danger ms-2"></span>
+        </div>
+    </div>
+}
+else
+{
+    <p class="text-muted">
+        <a asp-area="Identity" asp-page="/Account/Login">Log in</a> to write a review.
+    </p>
+}
+
+<div id="reviews-list">
+    @if (!movie.Reviews.Any())
+    {
+        <p id="no-reviews" class="text-muted">No reviews yet. Be the first!</p>
+    }
+    @foreach (var review in movie.Reviews)
+    {
+        <div class="border rounded p-3 mb-2" data-review-id="@review.Id">
+            <div class="d-flex justify-content-between">
+                <strong>@review.AuthorName</strong>
+                <span class="badge bg-info">@review.Rating / 10</span>
+            </div>
+            <p class="mb-1">@review.Content</p>
+            <small class="text-muted">@review.CreatedOn.ToString("dd MMM yyyy")</small>
+            @if (User.IsAdmin())
+            {
+                <button class="btn btn-sm btn-outline-danger float-end delete-review"
+                        data-review-id="@review.Id">Delete</button>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+<script>
+    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+    function formBody(data) {
+        const body = new URLSearchParams();
+        Object.keys(data).forEach(k => body.append(k, data[k]));
+        body.append('__RequestVerificationToken', token);
+        return body;
+    }
+
+    // ----- Add a review -----
+    const submitBtn = document.getElementById('submit-review');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', async function () {
+            const movieId = this.getAttribute('data-movie-id');
+            const content = document.getElementById('review-content').value;
+            const rating = document.getElementById('review-rating').value;
+            const errorSpan = document.getElementById('review-error');
+            errorSpan.textContent = '';
+
+            const res = await fetch('/Reviews/Add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formBody({ MovieId: movieId, Content: content, Rating: rating })
+            });
+
+            if (!res.ok) {
+                const err = await res.json().catch(() => ({}));
+                errorSpan.textContent = err.message || 'Could not post review.';
+                return;
+            }
+
+            const review = await res.json();
+            document.getElementById('no-reviews')?.remove();
+
+            const div = document.createElement('div');
+            div.className = 'border rounded p-3 mb-2';
+            div.setAttribute('data-review-id', review.id);
+            div.innerHTML =
+                '<div class="d-flex justify-content-between">' +
+                '<strong></strong><span class="badge bg-info"></span></div>' +
+                '<p class="mb-1"></p><small class="text-muted"></small>' +
+                '<button class="btn btn-sm btn-outline-danger float-end delete-review" ' +
+                'data-review-id="' + review.id + '">Delete</button>';
+            div.querySelector('strong').textContent = review.authorName;
+            div.querySelector('.badge').textContent = review.rating + ' / 10';
+            div.querySelector('p').textContent = review.content;
+            div.querySelector('small').textContent = review.createdOn;
+            document.getElementById('reviews-list').prepend(div);
+
+            document.getElementById('review-content').value = '';
+        });
+    }
+
+    // ----- Delete a review (event delegation) -----
+    document.getElementById('reviews-list').addEventListener('click', async function (e) {
+        if (!e.target.classList.contains('delete-review')) return;
+
+        const reviewId = e.target.getAttribute('data-review-id');
+        const res = await fetch('/Reviews/Delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formBody({ id: reviewId })
+        });
+
+        if (res.ok) {
+            document.querySelector('[data-review-id="' + reviewId + '"]').remove();
+        }
+    });
+
+    // ----- Toggle favorite -----
+    const favBtn = document.getElementById('favorite-btn');
+    if (favBtn) {
+        favBtn.addEventListener('click', async function () {
+            const movieId = this.getAttribute('data-movie-id');
+            const res = await fetch('/Favorites/Toggle', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formBody({ movieId: movieId })
+            });
+
+            if (!res.ok) return;
+            const data = await res.json();
+
+            if (data.isFavorite) {
+                this.className = 'btn btn-warning';
+                this.textContent = '★ In your favorites';
+            } else {
+                this.className = 'btn btn-outline-warning';
+                this.textContent = '☆ Add to favorites';
+            }
+        });
+    }
+</script>
+}
