@@ -1,8 +1,3 @@
-@*
-    The layout pulls Bootstrap from a CDN so there is nothing to install in
-    wwwroot for now. On Day 5 you can swap to local Bootstrap/site.css if you
-    prefer, but the CDN is perfectly fine for the defense.
-*@
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +6,9 @@
     <title>@ViewData["Title"] - MovieHub</title>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <style>
+        .col-md-offset-2 { display: none !important; }
+    </style>
 </head>
 <body>
     <header>
@@ -48,15 +46,12 @@
             </div>
         </nav>
     </header>
-
     <main class="container">
         @RenderBody()
     </main>
-
     <footer class="border-top text-center text-muted py-3 mt-4">
         <div class="container">&copy; @DateTime.Now.Year - MovieHub</div>
     </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
