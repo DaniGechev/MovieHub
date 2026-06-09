@@ -1,12 +1,161 @@
 @{
+
     ViewData["Title"] = "Home";
+
 }
 
-<div class="text-center py-5">
-    <h1 class="display-4">Welcome to MovieHub</h1>
-    <p class="lead">Browse movies, read reviews, and build your watchlist.</p>
-    <p class="text-muted">
-        The movie catalog and reviews are coming next (Day 5). Right now you can
-        register an account or log in as the seeded administrator.
+@* ===== Hero ===== *@
+
+<div class="px-4 py-5 my-4 text-center">
+
+    <h1 class="display-4 fw-bold">🎬 Welcome to MovieHub</h1>
+
+    <p class="col-lg-6 mx-auto lead text-muted">
+
+        Browse the movie catalog, write reviews, rate films, and build your personal watchlist.
+
     </p>
+
+    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center mt-4">
+
+        <a asp-controller="Movies" asp-action="Index" class="btn btn-primary btn-lg px-4">
+
+            Browse Movies
+
+        </a>
+
+        @if (!User.Identity!.IsAuthenticated)
+
+        {
+
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-outline-secondary btn-lg px-4">
+
+                Register Free
+
+            </a>
+
+        }
+
+    </div>
+
+</div>
+
+<hr />
+
+@* ===== Feature cards ===== *@
+
+<div class="row g-4 py-4 text-center">
+
+    <div class="col-md-4">
+
+        <div class="card h-100 border-0 shadow-sm p-3">
+
+            <div class="fs-1 mb-3">🎥</div>
+
+            <h5 class="card-title">Movie Catalog</h5>
+
+            <p class="card-text text-muted">
+
+                Browse a curated collection of films across all genres.
+
+                Search by title or director and sort by rating, year, or alphabetically.
+
+            </p>
+
+            <a asp-controller="Movies" asp-action="Index" class="btn btn-sm btn-outline-primary mt-auto">
+
+                Explore
+
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card h-100 border-0 shadow-sm p-3">
+
+            <div class="fs-1 mb-3">⭐</div>
+
+            <h5 class="card-title">Reviews & Ratings</h5>
+
+            <p class="card-text text-muted">
+
+                Share your thoughts on any film with a written review and a rating from 1 to 10.
+
+                See what other users think in real time.
+
+            </p>
+
+            @if (User.Identity!.IsAuthenticated)
+
+            {
+
+                <a asp-controller="Movies" asp-action="Index" class="btn btn-sm btn-outline-primary mt-auto">
+
+                    Write a Review
+
+                </a>
+
+            }
+
+            else
+
+            {
+
+                <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-sm btn-outline-primary mt-auto">
+
+                    Login to Review
+
+                </a>
+
+            }
+
+        </div>
+
+    </div>
+
+    <div class="col-md-4">
+
+        <div class="card h-100 border-0 shadow-sm p-3">
+
+            <div class="fs-1 mb-3">❤️</div>
+
+            <h5 class="card-title">My Favorites</h5>
+
+            <p class="card-text text-muted">
+
+                Save the films you love to your personal watchlist and access them any time from one place.
+
+            </p>
+
+            @if (User.Identity!.IsAuthenticated)
+
+            {
+
+                <a asp-controller="Favorites" asp-action="Mine" class="btn btn-sm btn-outline-primary mt-auto">
+
+                    My Favorites
+
+                </a>
+
+            }
+
+            else
+
+            {
+
+                <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-sm btn-outline-primary mt-auto">
+
+                    Get Started
+
+                </a>
+
+            }
+
+        </div>
+
+    </div>
+
 </div>
