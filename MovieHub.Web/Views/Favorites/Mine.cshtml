@@ -1,0 +1,18 @@
+@model IEnumerable<MovieListServiceModel>
+@{
+    ViewData["Title"] = "My Favorites";
+}
+
+<h1 class="mb-4">My Favorites</h1>
+
+@if (!Model.Any())
+{
+    <p class="text-muted">You haven't added any favorites yet.
+        <a asp-controller="Movies" asp-action="Index">Browse movies</a>.</p>
+}
+else
+{
+    <div class="row">
+        @Html.DisplayFor(m => m)
+    </div>
+}
