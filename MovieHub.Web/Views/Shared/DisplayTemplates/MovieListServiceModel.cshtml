@@ -1,0 +1,14 @@
+@model MovieListServiceModel
+
+<div class="col-md-4 mb-4">
+    <div class="card h-100 shadow-sm">
+        <img src="@Model.ImageUrl" class="card-img-top" alt="@Model.Title"
+             style="height: 320px; object-fit: cover;" />
+        <div class="card-body d-flex flex-column">
+            <h5 class="card-title">@Model.Title</h5>
+            <p class="card-text text-muted mb-3">@Model.GenreName &middot; @Model.ReleaseYear</p>
+            <a asp-controller="Movies" asp-action="Details" asp-route-id="@Model.Id"
+               class="btn btn-primary btn-sm mt-auto">Details</a>
+        </div>
+    </div>
+</div>
