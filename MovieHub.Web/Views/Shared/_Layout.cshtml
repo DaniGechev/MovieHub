@@ -6,17 +6,139 @@
     <title>@ViewData["Title"] - MovieHub</title>
     <link rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-dark: #0f1117;
+            --bg-card: #1a1d29;
+            --bg-elevated: #232733;
+            --accent: #e50914;
+            --accent-hover: #ff1f2d;
+            --text-main: #f5f5f5;
+            --text-muted: #9aa0ad;
+            --border: #2c3040;
+        }
+
+        * { font-family: 'Poppins', sans-serif; }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+        }
+
+        /* ===== Navbar ===== */
+        .navbar {
+            background: rgba(15, 17, 23, 0.95) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border) !important;
+        }
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: var(--accent) !important;
+            letter-spacing: -0.5px;
+        }
+        .navbar .nav-link {
+            color: var(--text-muted) !important;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .navbar .nav-link:hover { color: var(--text-main) !important; }
+
+        /* ===== Cards ===== */
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+            border-color: var(--accent);
+        }
+        .card-title { color: var(--text-main); font-weight: 600; }
+        .card-text { color: var(--text-muted); }
+
+        /* ===== Buttons ===== */
+        .btn-primary {
+            background: var(--accent);
+            border: none;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background: var(--accent-hover); }
+        .btn-outline-primary {
+            color: var(--accent);
+            border-color: var(--accent);
+            font-weight: 600;
+            border-radius: 8px;
+        }
+        .btn-outline-primary:hover { background: var(--accent); border-color: var(--accent); }
+        .btn-outline-secondary { color: var(--text-muted); border-color: var(--border); }
+        .btn-outline-warning, .btn-warning { border-radius: 8px; font-weight: 600; }
+
+        /* ===== Forms ===== */
+        .form-control, .form-select {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            border-radius: 8px;
+        }
+        .form-control:focus, .form-select:focus {
+            background: var(--bg-elevated);
+            color: var(--text-main);
+            border-color: var(--accent);
+            box-shadow: 0 0 0 0.2rem rgba(229,9,20,0.25);
+        }
+        .form-control::placeholder { color: var(--text-muted); }
+        .form-floating label { color: var(--text-muted); }
+        .form-control:disabled, .form-control[readonly] {
+            background: var(--bg-elevated);
+            color: var(--text-muted);
+        }
+
+        /* ===== Tables ===== */
+        .table { color: var(--text-main); }
+        .table > :not(caption) > * > * { background: var(--bg-card); color: var(--text-main); border-color: var(--border); }
+
+        /* ===== Misc ===== */
+        h1, h2, h3, h4, h5 { font-weight: 600; }
+        a { color: var(--accent); }
+        hr { border-color: var(--border); }
+        .badge.bg-info { background: var(--accent) !important; }
+        .text-muted { color: var(--text-muted) !important; }
+        .border { border-color: var(--border) !important; }
+        .card-img-top { background: var(--bg-elevated); }
+        .list-group-item {
+            background: var(--bg-card);
+            color: var(--text-main);
+            border-color: var(--border);
+        }
+        .nav-pills .nav-link { color: var(--text-muted); }
+        .nav-pills .nav-link.active { background: var(--accent); color: #fff; }
+
+        /* Identity pages cleanup */
         .col-md-offset-2 { display: none !important; }
         .row:has(#registerForm), .row:has(#account) { justify-content: center; }
         .col-md-4:has(#registerForm), .col-md-4:has(#account) { flex: 0 0 auto !important; width: 50% !important; }
+
+        footer { border-color: var(--border) !important; color: var(--text-muted) !important; }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom mb-3">
+        <nav class="navbar navbar-expand-sm mb-4">
             <div class="container">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">MovieHub</a>
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                    <i class="fa-solid fa-film"></i> MovieHub
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarMain" aria-controls="navbarMain"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -51,8 +173,10 @@
     <main class="container">
         @RenderBody()
     </main>
-    <footer class="border-top text-center text-muted py-3 mt-4">
-        <div class="container">&copy; @DateTime.Now.Year - MovieHub</div>
+    <footer class="border-top text-center py-4 mt-5">
+        <div class="container">
+            <i class="fa-solid fa-film"></i> &copy; @DateTime.Now.Year - MovieHub
+        </div>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)

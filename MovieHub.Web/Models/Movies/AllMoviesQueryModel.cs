@@ -6,7 +6,7 @@ namespace MovieHub.Web.Models.Movies
 {
     public class AllMoviesQueryModel
     {
-        public const int MoviesPerPage = 6;
+        public const int MoviesPerPage = 12;
 
         [Display(Name = "Search")]
         public string? SearchTerm { get; set; }
